@@ -10,3 +10,29 @@
   </p>
 </div>
 </div>
+
+<div class="columns is-multiline is-mobile">
+<div class="column is-4" *ngFor="let result of results">
+<div class="card">
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-48x48">
+          <img src={{result.profile_image.medium}} alt="Image">
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-4">{{result.name}}</p>
+        <p class="subtitle is-6">@{{result.username}}</p>
+      </div>
+    </div>
+
+    <div class="content">
+      {{result.bio}}
+      <br>
+      <small>{{result.location}}</small>
+    </div>
+  </div>
+</div>
+</div>
+</div>
