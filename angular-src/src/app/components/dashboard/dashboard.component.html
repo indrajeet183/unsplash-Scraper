@@ -5,8 +5,8 @@
   <div class="column is-3">
   <label class="label">Search</label>
   <p class="control">
-    <input class="input" type="text" placeholder="Search">
-    <a class="button is-dark is-small">Dark</a>
+    <input [(ngModel)]="query" name="query" class="input" type="text" placeholder="Search">
+    <a class="button is-dark is-small" (click)="search()">Dark</a>
   </p>
 </div>
 </div>

@@ -15,12 +15,13 @@ router.get('/oauth',(req,res,next) =>{
         scope: scope
     });
     console.log(`${uri}?${query_param}`);
-    res.redirect(`${uri}?${query_param}`);
+    //res.redirect(`${uri}?${query_param}`);
+    res.send({success: true,link:`${uri}?${query_param}`});
 });
 
 router.get('/code',(req,res,next) => {
-    //console.log(req.query.code);
-    //res.redirect("http://localhost:4200");
+    console.log(req.query.code);
+    res.redirect("http://localhost:4200");
     let para = querystring.stringify({
         client_id:config.CLIENT_ID,
         client_secret:config.CLIENT_SECRET,
@@ -63,13 +64,14 @@ router.get('/code',(req,res,next) => {
 });
 
 router.get('/search',(req,res,next)=>{
-    console.log(BEARER_TOKEN);
+    console.log(req.query);
     unirest.get(`${config.API_URL}/search/users`)
     .headers({'Authorization':`Bearer ${BEARER_TOKEN}`})
     .query({
-        query:'indrajeet',
+        query:req.query.qry,
         page:1
     }).end(function(response){
+        console.log(response.body.results);
         res.send(response.body.results);
     });
 });
