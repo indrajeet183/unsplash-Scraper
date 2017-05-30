@@ -60,6 +60,7 @@ router.get('/code',(req,res,next) => {
     .end(function (response) {
         //console.log(response.body.access_token);
         BEARER_TOKEN = response.body.access_token;
+        //re.send(BEARER_TOKEN);
     });
 });
 
@@ -69,10 +70,10 @@ router.get('/search',(req,res,next)=>{
     .headers({'Authorization':`Bearer ${BEARER_TOKEN}`})
     .query({
         query:req.query.qry,
-        page:1
+        page:req.query.page,
     }).end(function(response){
-        console.log(response.body.results);
-        res.send(response.body.results);
+        //console.log(response.body);
+        res.send(response.body);
     });
 });
 module.exports = router;

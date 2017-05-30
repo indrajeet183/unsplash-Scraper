@@ -6,13 +6,13 @@
   <label class="label">Search</label>
   <p class="control">
     <input [(ngModel)]="query" name="query" class="input" type="text" placeholder="Search">
-    <a class="button is-dark is-small" (click)="search()">Dark</a>
+    <a class="button is-dark is-small" (click)="search(1)">Dark</a>
   </p>
 </div>
 </div>
 
-<div class="columns is-multiline is-mobile">
-<div class="column is-4" *ngFor="let result of results">
+<div class="columns is-multiline is-flex-desktop-only">
+<div class="column is-6" *ngFor="let result of results">
 <div class="card">
   <div class="card-content">
     <div class="media">
@@ -30,9 +30,19 @@
     <div class="content">
       {{result.bio}}
       <br>
+      <small></small>
+       <br>
       <small>{{result.location}}</small>
     </div>
   </div>
 </div>
 </div>
 </div>
+
+<nav class="pagination is-centered">
+  <a class="pagination-previous" (click)="search(0)">Previous</a>
+  <a class="pagination-next" (click)="search(1)">Next page</a>
+  <ul class="pagination-list">
+    <li><a class="pagination-link">1</a></li>
+  </ul>
+</nav>
