@@ -5,49 +5,33 @@ const unirest = require('unirest');
 const config = require('../config/app');
 var BEARER_TOKEN;
 
+
+
+/**
+ * Route for Oauth which will redirect to the CALLBACK_URI with code as query parameter
+ */
 router.get('/oauth',(req,res,next) =>{
     const scope = "public";
     const uri = config.AUTH_URI;
-    let query_param = querystring.stringify({
+    let query_param = querystring.stringify({               //setting the query params
         client_id: config.CLIENT_ID,
         redirect_uri: config.CALLBACK_URI,
         response_type: "code",
         scope: scope
     });
-    console.log(`${uri}?${query_param}`);
-    //res.redirect(`${uri}?${query_param}`);
-    res.send({success: true,link:`${uri}?${query_param}`});
+    //console.log(`${uri}?${query_param}`);
+    res.send({success: true,link:`${uri}?${query_param}`}); //on success send this json with link
 });
 
+/**
+ * Route for generating Bearer token by using code
+ */
 router.get('/code',(req,res,next) => {
-    console.log(req.query.code);
+    //console.log(req.query.code);
     res.redirect("http://localhost:4200");
-    let para = querystring.stringify({
-        client_id:config.CLIENT_ID,
-        client_secret:config.CLIENT_SECRET,
-        redirect_uri:config.CALLBACK_URI,
-        grant_type:'authorization_code',
-        code:req.query.code
+    let c = req.query.code;                         //get code form url parameter
 
-    });
-    let c = req.query.code;
-    //Failed to request { reason: unknown }
-    /*
-    let options = {
-        host:'http://unsplash.com',
-        port:80,
-        path:`/oauth/token?${para}`,
-        method:'POST',
-        headers:{
-            'Content-Type':'application/json','Accept': 'application/json'
-        }
-    }
-    let request = http.request(options,(response)=>{
-        console.log(response);
-    });
-    request.end();
-    */
-    console.log("para"+`${para}`);
+    //POST request for generating Bearer token which is used for access
     unirest.post('http://unsplash.com/oauth/token')
     .headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
     .query({
@@ -59,15 +43,19 @@ router.get('/code',(req,res,next) => {
     })
     .end(function (response) {
         //console.log(response.body.access_token);
-        BEARER_TOKEN = response.body.access_token;
+        BEARER_TOKEN = response.body.access_token;                 
         //re.send(BEARER_TOKEN);
     });
 });
 
+
+/**
+ * Route for searching query which contains query and page number as query param
+ */
 router.get('/search',(req,res,next)=>{
     console.log(req.query);
     unirest.get(`${config.API_URL}/search/users`)
-    .headers({'Authorization':`Bearer ${BEARER_TOKEN}`})
+    .headers({'Authorization':`Bearer ${BEARER_TOKEN}`})    //set Header for access token
     .query({
         query:req.query.qry,
         page:req.query.page,

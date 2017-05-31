@@ -3,14 +3,20 @@
 </div>
 <div class="columns">
   <div class="column is-3">
+    <form (ngSubmit)="searchPage(true)">
   <label class="label">Search</label>
   <p class="control">
-    <input [(ngModel)]="query" name="query" class="input" type="text" placeholder="Search">
-    <a class="button is-dark is-small" (click)="search(1)">Dark</a>
+    <input [(ngModel)]="query" name="query" class="input" type="text" placeholder="Search" required>
+    <a class="button is-dark is-small" type="submit">Search</a>
   </p>
+    </form>
 </div>
 </div>
 
+
+<!-- 
+  Displaying cards for each profile by iterating results
+-->
 <div class="columns is-multiline is-flex-desktop-only">
 <div class="column is-6" *ngFor="let result of results">
 <div class="card">
@@ -30,19 +36,36 @@
     <div class="content">
       {{result.bio}}
       <br>
-      <small></small>
+      <a href="{{result.portfolio_url}}">{{result.portfolio_url}}</a>
        <br>
       <small>{{result.location}}</small>
     </div>
+    
   </div>
+  <footer class="card-footer">
+  <span class="icon card-footer-item">
+    <i class="fa fa-thumbs-up" aria-hidden="true">  {{result.total_likes}}</i>
+  </span>
+  <span class="icon card-footer-item">
+    <i class="fa fa-picture-o" aria-hidden="true">  {{result.total_photos}}</i>
+  </span>
+  <span class="icon card-footer-item">
+    <i class="fa fa-file" aria-hidden="true">  {{result.total_collections}}</i>
+  </span>
+  </footer>
 </div>
 </div>
 </div>
 
+
+<!-- 
+  Pagination
+  *still need to be furnished*
+-->
 <nav class="pagination is-centered">
-  <a class="pagination-previous" (click)="search(0)">Previous</a>
-  <a class="pagination-next" (click)="search(1)">Next page</a>
+  <a class="pagination-previous" (click)="searchPage(false)">Previous</a>
+  <a class="pagination-next" (click)="searchPage(true)">Next page</a>
   <ul class="pagination-list">
-    <li><a class="pagination-link">1</a></li>
+    <li><a class="pagination-link is-current" *ngIf="currentPage">{{currentPage}}</a></li>
   </ul>
 </nav>
