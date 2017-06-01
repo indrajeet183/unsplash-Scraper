@@ -16,7 +16,7 @@ export class AuthService {
  */
   doAuth(){
     return this.http.get(this.baseuri+'/oauth')
-    .map(res => res.json());
+    .map(res => res.json()) ;
   }
 
 /**
@@ -29,6 +29,10 @@ export class AuthService {
     .map(res => res.json());
   }
 
+
+  /**
+   * @description check if user is logged in or not by checking localstorage item
+   */
   isLoggedIn(){
    let is: boolean;
     (localStorage.getItem("loggedIn") === "true" )?is = true:is = false;

@@ -47,13 +47,14 @@ export class DashboardComponent implements OnInit {
    */
   onLogout(){
     this.authService.logout().subscribe(data =>{
-      if(data.success == "true")  
+      if(data.success == true)  
         this.results = null;
     });
+    
   }
 
   /**
-   * 
+   * @description To check if logged in or not
    */
   loggedIn(){
      return this.authService.isLoggedIn();
@@ -65,19 +66,31 @@ export class DashboardComponent implements OnInit {
     searchPage(param: number){
       console.log(param);
       console.log(this.currentPage);
-      if(this.currentPage <= 0 || param == 0){                     //New search
+      if(this.currentPage <= 0 || param === 0){                     //New search
         this.currentPage=1;
       }
-      else {
-         param?this.currentPage++:this.currentPage--;//Next & previous button
+      else {  
+         param === 1?this.currentPage++:this.currentPage--;//Next & previous button
          document.body.scrollTop = 0;  
        }
       console.log(this.currentPage);
-      this.searchService.doSearch(this.query,this.currentPage).subscribe(data =>{
-          this.results = data.results;
-          //this.total_pages = data.total_pages;  //enhancment use
-          console.log(this.results);     
-      });
+      this.search(this.currentPage);
       console.log(this.currentPage);
     }
+
+    /**
+     * @description method for retrieving result of selected page
+     * @param page page number to be searched
+     */
+    search(page: number){
+      document.body.scrollTop = 0;  
+      this.currentPage = page;
+      this.searchService.doSearch(this.query,page).subscribe(data =>{
+          this.results = data.results;
+          this.total_pages = data.total_pages;  //enhancment use
+          console.log(this.results);    
+          console.log(this.total_pages); 
+      });
+    }
+    
 }
