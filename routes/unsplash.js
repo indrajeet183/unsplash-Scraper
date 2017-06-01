@@ -53,7 +53,6 @@ router.get('/code',(req,res,next) => {
  * Route for searching query which contains query and page number as query param
  */
 router.get('/search',(req,res,next)=>{
-    console.log(req.query);
     unirest.get(`${config.API_URL}/search/users`)
     .headers({'Authorization':`Bearer ${BEARER_TOKEN}`})    //set Header for access token
     .query({
@@ -64,4 +63,11 @@ router.get('/search',(req,res,next)=>{
         res.send(response.body);
     });
 });
+
+/**
+ * Route for logging out and clearing access token 
+ */
+router.get('/logout',(req,res,next) =>{
+    res.send({success:true,msg:"Logged out Succesfull"})
+})
 module.exports = router;

@@ -1,13 +1,16 @@
 <div id="auth">
-  <a class="button is-dark is-medium" (click)="onAuthorize()">Authorize</a>
+  <a *ngIf="!loggedIn()" class="button is-dark is-medium" (click)="onAuthorize()">Authorize</a>
 </div>
-<div class="columns">
+<div id="lout" *ngIf="loggedIn()" >
+  <a class="button is-dark is-medium" (click)="onLogout()">Logout</a>
+</div>
+<div class="columns" *ngIf="loggedIn()">
   <div class="column is-3">
-    <form (ngSubmit)="searchPage(true)">
-  <label class="label">Search</label>
-  <p class="control">
-    <input [(ngModel)]="query" name="query" class="input" type="text" placeholder="Search" required>
-    <a class="button is-dark is-small" type="submit">Search</a>
+    <form (submit)="searchPage(0)">
+       <label class="label">Search</label>
+        <p class="control">
+        <input [(ngModel)]="query" name="query" class="input" type="text" placeholder="Search" required>
+      <input class="button is-dark is-small" type="submit" value="Search">
   </p>
     </form>
 </div>
@@ -62,9 +65,9 @@
   Pagination
   *still need to be furnished*
 -->
-<nav class="pagination is-centered">
-  <a class="pagination-previous" (click)="searchPage(false)">Previous</a>
-  <a class="pagination-next" (click)="searchPage(true)">Next page</a>
+<nav class="pagination is-centered" *ngIf="loggedIn()">
+  <a class="pagination-previous" (click)="searchPage(-1)">Previous</a>
+  <a class="pagination-next" (click)="searchPage(1)">Next page</a>
   <ul class="pagination-list">
     <li><a class="pagination-link is-current" *ngIf="currentPage">{{currentPage}}</a></li>
   </ul>

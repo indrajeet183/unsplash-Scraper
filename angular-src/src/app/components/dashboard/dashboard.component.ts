@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { SearchService } from '../../services/search.service';
 import {Router} from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,6 +34,7 @@ export class DashboardComponent implements OnInit {
     this.authService.doAuth().subscribe(data =>{
       if(data.success){
         location.assign(data.link);
+        localStorage.setItem("loggedIn","true");
       }
       else{
         console.log('Error');
@@ -41,16 +43,32 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
+   * @description Method for logging out scraper(still underconstruction)
+   */
+  onLogout(){
+    this.authService.logout().subscribe(data =>{
+      if(data.success == "true")  
+        this.results = null;
+    });
+  }
+
+  /**
+   * 
+   */
+  loggedIn(){
+     return this.authService.isLoggedIn();
+  }
+  /**
    * @description Method for retreving data by page number and with same query parameter
    * @param boolean for chekcing if button is previous or next 
    */
-    searchPage(param: boolean){
+    searchPage(param: number){
       console.log(param);
       console.log(this.currentPage);
-      if(this.currentPage <= 0){                     //New search
-        this.currentPage++;
+      if(this.currentPage <= 0 || param == 0){                     //New search
+        this.currentPage=1;
       }
-       else {
+      else {
          param?this.currentPage++:this.currentPage--;//Next & previous button
          document.body.scrollTop = 0;  
        }

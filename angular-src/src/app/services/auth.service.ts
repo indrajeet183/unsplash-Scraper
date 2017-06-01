@@ -19,4 +19,20 @@ export class AuthService {
     .map(res => res.json());
   }
 
+/**
+ * @description Method for logging out (removed item from localstorage)
+ */
+  logout(){
+    localStorage.removeItem("loggedIn");
+    console.log('ala');
+    return this.http.get(this.baseuri+'/logout')
+    .map(res => res.json());
+  }
+
+  isLoggedIn(){
+   let is: boolean;
+    (localStorage.getItem("loggedIn") === "true" )?is = true:is = false;
+    return is;
+  }
+
 }
