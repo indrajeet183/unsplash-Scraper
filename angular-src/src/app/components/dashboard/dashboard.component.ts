@@ -3,7 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { SearchService } from '../../services/search.service';
 import {Router} from '@angular/router';
 import { NgForm } from '@angular/forms';
-
+import { AppComponent } from '../../app.component';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -15,12 +15,15 @@ export class DashboardComponent implements OnInit {
   results: any;               //result of successful search
   total_pages:number;         //total pages avilable for search query
   currentPage: number;        //current page number
+  pageOffset: number;
 
   constructor(
     private authService: AuthService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private router: Router
   ) { 
     this.currentPage = 0;
+    this.pageOffset =0;
   }
 
   ngOnInit() {
@@ -35,6 +38,7 @@ export class DashboardComponent implements OnInit {
       if(data.success){
         location.assign(data.link);
         localStorage.setItem("loggedIn","true");
+        this.router.navigate(['']);
       }
       else{
         console.log('Error');
@@ -59,13 +63,12 @@ export class DashboardComponent implements OnInit {
   loggedIn(){
      return this.authService.isLoggedIn();
   }
-  /**
-   * @description Method for retreving data by page number and with same query parameter
-   * @param boolean for chekcing if button is previous or next 
-   */
+
+   /**
+    * @description Method for retreving data by page number and with same query parameter
+    * @param boolean for chekcing if button is previous or next 
+    */
     searchPage(param: number){
-      console.log(param);
-      console.log(this.currentPage);
       if(this.currentPage <= 0 || param === 0){                     //New search
         this.currentPage=1;
       }
@@ -73,9 +76,7 @@ export class DashboardComponent implements OnInit {
          param === 1?this.currentPage++:this.currentPage--;//Next & previous button
          document.body.scrollTop = 0;  
        }
-      console.log(this.currentPage);
       this.search(this.currentPage);
-      console.log(this.currentPage);
     }
 
     /**
@@ -83,14 +84,26 @@ export class DashboardComponent implements OnInit {
      * @param page page number to be searched
      */
     search(page: number){
+      //console.log(page);
       document.body.scrollTop = 0;  
       this.currentPage = page;
       this.searchService.doSearch(this.query,page).subscribe(data =>{
           this.results = data.results;
           this.total_pages = data.total_pages;  //enhancment use
-          console.log(this.results);    
-          console.log(this.total_pages); 
       });
+    }
+
+    /**
+    * @description sets page offset depeding on current page number
+    */
+    getPageOffset(){
+      if(this.currentPage > 10){
+        this.pageOffset = this.currentPage/10;
+        this.currentPage%10 === 0?this.pageOffset=Math.trunc(this.pageOffset-1)*10:this.pageOffset=Math.trunc(this.pageOffset)*10;      
+        return this.pageOffset;
+      }
+      else 
+        return 0;
     }
     
 }

@@ -28,7 +28,7 @@ router.get('/oauth',(req,res,next) =>{
  */
 router.get('/code',(req,res,next) => {
     //console.log(req.query.code);
-    res.redirect("http://localhost:4200");
+    //res.redirect("http://localhost:3000");
     let c = req.query.code;                         //get code form url parameter
 
     //POST request for generating Bearer token which is used for access

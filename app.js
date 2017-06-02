@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const users = require('./routes/unsplash');
 const port = 3000;
+process.env.port = 3000;
 
 //set static Folder
 app.use(express.static(path.join(__dirname,'public')));

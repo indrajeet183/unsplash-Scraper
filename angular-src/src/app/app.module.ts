@@ -9,6 +9,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthService } from './services/auth.service';
 import { SearchService } from './services/search.service';
 
+const appRoutes: Routes = [
+  {path:'', component: DashboardComponent}
+]
 
 @NgModule({
   declarations: [
@@ -20,7 +23,7 @@ import { SearchService } from './services/search.service';
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule,
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [AuthService,SearchService],
   bootstrap: [AppComponent]
