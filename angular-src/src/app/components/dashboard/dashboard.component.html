@@ -66,11 +66,17 @@
   *still need to be furnished*
 -->
 <div *ngIf="loggedIn()">
-<nav class="pagination is-centered">
+<nav class="pagination is-centered" *ngIf="currentPage">
   <a class="pagination-previous" (click)="searchPage(-1)" *ngIf="currentPage!=1">Previous</a>
   <a class="pagination-next" (click)="searchPage(1)" *ngIf="currentPage!=total_pages">Next page</a>
-  <ul class="pagination-list" *ngFor="let result of results;let i=index">
+  <ul class="pagination-list" *ngIf="currentPage!=1">
+      <li><a class="pagination-link" *ngIf="currentPage!=1 && currentPage>10 " (click)="skipPages(false)"><<</a></li>
+    </ul>
+  <ul class="pagination-list" *ngFor="let result of pagination_pages;let i=index">
     <li><a class="pagination-link" *ngIf="currentPage" [ngClass]="i+getPageOffset() === currentPage-1?'is-current':''" (click)="search(i+1+getPageOffset())">{{(i+1)+getPageOffset()}}</a></li>
   </ul>
+    <ul class="pagination-list">
+      <li><a class="pagination-link" *ngIf="currentPage!=total_pages" (click)="skipPages(true)">>></a></li>
+    </ul>
 </nav>
 </div>

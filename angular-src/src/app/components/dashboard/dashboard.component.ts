@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   total_pages:number;         //total pages avilable for search query
   currentPage: number;        //current page number
   pageOffset: number;
+  pagination_pages: Array<number>;
 
   constructor(
     private authService: AuthService,
@@ -90,6 +91,13 @@ export class DashboardComponent implements OnInit {
       this.searchService.doSearch(this.query,page).subscribe(data =>{
           this.results = data.results;
           this.total_pages = data.total_pages;  //enhancment use
+          if(this.total_pages >= 10){
+            this.pagination_pages = new Array<number>(10);  
+          }
+          else{
+            this.pagination_pages = new Array<number>(this.total_pages);
+          }
+          
       });
     }
 
@@ -104,6 +112,15 @@ export class DashboardComponent implements OnInit {
       }
       else 
         return 0;
+    }
+
+    /**
+     * @description skips the pages +10 ahead or -10back
+     * @param param true for skip forward ,false for skip backward
+     */
+    skipPages(param: boolean){
+      param?this.currentPage+=10:this.currentPage-=10;
+      this.search(this.currentPage);
     }
     
 }
